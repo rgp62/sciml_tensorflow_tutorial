@@ -31,7 +31,7 @@ def burgersEqn(samps,dt,Nt,k):
 def get_ex3_1():
     N = 256
     samps = 1
-    L = np.pi
+    L = 2.*np.pi
     x = np.arange(0,N)/N*L
     k = np.arange(0,N//2+1)
     T = 1.
@@ -44,3 +44,26 @@ def get_ex3_1():
 def get_ex3_2():
     xt = np.random.uniform(-1,1,(1000,2)).astype('float32')
     return xt,-1/9 * (tf.sin(3*xt[...,0]) + tf.sin(3*xt[...,1]))
+
+def get_ex6_1(samps):
+    N = 256
+    L = np.pi
+    x = np.arange(0,N)/N*L
+    k = np.arange(0,N//2+1)    
+    uh = 20*np.exp(2*np.pi*np.random.normal(0,1,(samps,N//2+1))*1.j)*scipy.special.erfc(k-3)
+    u = np.fft.irfft(uh)
+    v = np.fft.irfft(1.j*k*np.fft.rfft(u**2))
+    return u,v
+
+def get_ex6_2(samps):
+    N = 256
+    L = 2.*np.pi
+    x = np.arange(0,N)/N*L
+    k = np.arange(0,N//2+1)
+    T = 1.
+    Nt = 1000
+    dt = T/Nt
+    t = np.arange(Nt+1)*dt
+    u = burgersEqn(1,dt,Nt,k)
+    return x,t,u,k
+
